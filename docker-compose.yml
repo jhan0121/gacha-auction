@@ -1,0 +1,19 @@
+services:
+  gacha-mysql:
+    image: mysql:8.4
+    container_name: gacha-auction-mysql
+    ports:
+      - "33306:3306"
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - gacha-auction-db-volume:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+
+volumes:
+  gacha-auction-db-volume:
