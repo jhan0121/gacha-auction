@@ -1,17 +1,23 @@
 package com.gacha_auction.user.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.gacha_auction.TestcontainersConfiguration;
+import com.gacha_auction.exception.dto.ErrorResponse;
 import com.gacha_auction.user.controller.dto.request.UserRequest;
 import com.gacha_auction.user.controller.dto.response.FindUserResponse;
 import com.gacha_auction.user.controller.dto.response.UserResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.net.URI;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -102,5 +108,32 @@ class UserControllerTest {
             softly.assertThat(userResponse.name()).isEqualTo(name);
         });
     }
-}
 
+    @ParameterizedTest
+    @MethodSource("provideInvalidCase")
+    @DisplayName("유저 정보 저장 기능에서 누락된 값이 존재할 시, Bad Request를 응답한다")
+    void saveInvalidFormat(final String name, final String password, final String errorMessage) {
+        // given
+        final UserRequest request = new UserRequest(name, password);
+        final URI uri = URI.create("/api/v1/users");
+
+        // when
+        final ErrorResponse errorResponse = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post(uri)
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value()).extract()
+                .jsonPath().getObject(".", ErrorResponse.class);
+
+        // then
+        assertThat(errorResponse.message()).isEqualTo(errorMessage);
+    }
+
+    static Stream<Arguments> provideInvalidCase() {
+        return Stream.of(
+                Arguments.of(null, "password", "name must not be null"),
+                Arguments.of("name", null, "password must not be null")
+        );
+    }
+}

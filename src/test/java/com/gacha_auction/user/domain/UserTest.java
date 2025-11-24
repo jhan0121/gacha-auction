@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.NullSource;
 
 class UserTest {
 
@@ -34,22 +33,8 @@ class UserTest {
     }
 
     @ParameterizedTest
-    @NullSource
-    @DisplayName("name이 null인 유저를 생성 시, 예외를 발생한다")
-    void createWithNullName(String name) {
-        // given
-        final String password = "password";
-
-        // when
-        // then
-        assertThatThrownBy(() -> User.withoutId(name, password))
-                .isInstanceOf(NotNullAllowedException.class)
-                .hasMessageContaining("name must not null");
-    }
-
-    @ParameterizedTest
     @MethodSource("provideNullParameterCase")
-    @DisplayName("password가 null인 유저를 생성 시, 예외를 발생한다")
+    @DisplayName("필드 값이 null인 유저를 생성 시, 예외를 발생한다")
     void createWithNullPassword(final String name, final String password, final String exceptionMessage) {
         // given
         // when
@@ -61,8 +46,8 @@ class UserTest {
 
     private static Stream<Arguments> provideNullParameterCase() {
         return Stream.of(
-                Arguments.of(null, "password", "name must not null"),
-                Arguments.of("name", null, "password must not null")
+                Arguments.of(null, "password", "name must not be null"),
+                Arguments.of("name", null, "password must not be null")
         );
     }
 }

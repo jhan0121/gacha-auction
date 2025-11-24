@@ -26,10 +26,10 @@ public class User extends SoftDeleteBaseEntity {
 
     private static void validateNotNull(final String name, final String password) {
         if (name == null) {
-            throw new NotNullAllowedException("name must not null");
+            throw new NotNullAllowedException("name must not be null");
         }
         if (password == null) {
-            throw new NotNullAllowedException("password must not null");
+            throw new NotNullAllowedException("password must not be null");
         }
     }
 
