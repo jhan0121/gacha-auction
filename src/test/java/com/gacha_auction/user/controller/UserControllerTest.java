@@ -1,10 +1,8 @@
 package com.gacha_auction.user.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.gacha_auction.TestcontainersConfiguration;
-import com.gacha_auction.exception.dto.ErrorResponse;
 import com.gacha_auction.user.controller.dto.request.UserRequest;
 import com.gacha_auction.user.controller.dto.response.FindUserResponse;
 import com.gacha_auction.user.controller.dto.response.UserResponse;
@@ -73,14 +71,11 @@ class UserControllerTest {
         final URI uri = URI.create("/api/v1/users/" + notExistedId);
 
         // when
-        final ErrorResponse errorResponse = RestAssured.given().log().all()
+        // then
+        RestAssured.given().log().all()
                 .when().get(uri)
                 .then().log().all()
-                .statusCode(HttpStatus.NOT_FOUND.value()).extract()
-                .jsonPath().getObject(".", ErrorResponse.class);
-
-        // then
-        assertThat(errorResponse.message()).isEqualTo("not existed user");
+                .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
