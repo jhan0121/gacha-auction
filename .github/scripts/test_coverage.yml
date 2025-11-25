@@ -2,8 +2,6 @@ name: Test Coverage Validation
 
 on:
   pull_request:
-    branches:
-      [ main ]
     types:
       [ opened, synchronize, reopened ]
 
