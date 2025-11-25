@@ -17,8 +17,8 @@ class UserTest {
     @DisplayName("id가 없는 유저를 생성할 수 있다")
     void createWithoutId() {
         // given
-        final String name = "test";
-        final String password = "password";
+        final UserName name = UserName.from("test");
+        final Password password = Password.from("password");
         final Long defaultCoinAmount = 1000L;
 
         // when
@@ -35,19 +35,19 @@ class UserTest {
     @ParameterizedTest
     @MethodSource("provideNullParameterCase")
     @DisplayName("필드 값이 null인 유저를 생성 시, 예외를 발생한다")
-    void createWithNullPassword(final String name, final String password, final String exceptionMessage) {
+    void createWithNullPassword(final UserName name, final Password password, final String target) {
         // given
         // when
         // then
         assertThatThrownBy(() -> User.withoutId(name, password))
                 .isInstanceOf(NotNullAllowedException.class)
-                .hasMessageContaining(exceptionMessage);
+                .hasMessageContaining("null이 될 수 없습니다: %s".formatted(target));
     }
 
     private static Stream<Arguments> provideNullParameterCase() {
         return Stream.of(
-                Arguments.of(null, "password", "null이 될 수 없습니다: name"),
-                Arguments.of("name", null, "null이 될 수 없습니다: password")
+                Arguments.of(null, Password.from("password"), "name"),
+                Arguments.of(UserName.from("name"), null, "password")
         );
     }
 }
