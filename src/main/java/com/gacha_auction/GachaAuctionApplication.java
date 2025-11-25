@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class GachaAuctionApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(GachaAuctionApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(GachaAuctionApplication.class, args);
+    }
 
 }
