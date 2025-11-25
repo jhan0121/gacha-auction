@@ -1,10 +1,10 @@
 package com.gacha_auction.user.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.gacha_auction.exception.NotNullAllowedException;
 import java.util.stream.Stream;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,8 +14,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 class UserTest {
 
     @Test
-    @DisplayName("id가 없는 유저를 생성할 수 있다")
-    void createWithoutId() {
+    @DisplayName("withoutId 메서드를 통해 id가 없는 User를 생성할 수 있다")
+    void withoutId() {
         // given
         final UserName name = UserName.from("test");
         final Password password = Password.from("password");
@@ -25,9 +25,9 @@ class UserTest {
         final User actual = User.withoutId(name, password);
 
         // then
-        SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(actual.getName().getValue()).isEqualTo(name);
-            softly.assertThat(actual.getPassword().getValue()).isEqualTo(password);
+        assertSoftly(softly -> {
+            softly.assertThat(actual.getName()).isEqualTo(name);
+            softly.assertThat(actual.getPassword()).isEqualTo(password);
             softly.assertThat(actual.getCoin().getAmount()).isEqualTo(defaultCoinAmount);
         });
     }

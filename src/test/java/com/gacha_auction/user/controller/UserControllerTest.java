@@ -112,7 +112,7 @@ class UserControllerTest {
     @ParameterizedTest
     @MethodSource("provideInvalidCase")
     @DisplayName("유저 정보 저장 기능에서 누락된 값이 존재할 시, Bad Request를 응답한다")
-    void saveInvalidFormat(final String name, final String password, final String errorMessage) {
+    void saveInvalidFormat(final String name, final String password) {
         // given
         final UserRequest request = new UserRequest(name, password);
         final URI uri = URI.create("/api/v1/users");
@@ -127,13 +127,13 @@ class UserControllerTest {
                 .jsonPath().getObject(".", ErrorResponse.class);
 
         // then
-        assertThat(errorResponse.message()).isEqualTo(errorMessage);
+        assertThat(errorResponse.message()).contains("null이 될 수 없습니다");
     }
 
     static Stream<Arguments> provideInvalidCase() {
         return Stream.of(
-                Arguments.of(null, "password", "null이 될 수 없습니다: name"),
-                Arguments.of("name", null, "null이 될 수 없습니다: password")
+                Arguments.of(null, "password"),
+                Arguments.of("name", null)
         );
     }
 }

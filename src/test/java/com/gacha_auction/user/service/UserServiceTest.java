@@ -55,7 +55,7 @@ class UserServiceTest {
         // then
         assertSoftly(softly -> {
             softly.assertThat(actual.id()).isNotNull();
-            softly.assertThat(actual.name()).isEqualTo(name);
+            softly.assertThat(actual.name()).isEqualTo(name.getValue());
         });
     }
 
@@ -79,7 +79,7 @@ class UserServiceTest {
         // then
         assertSoftly(softly -> {
             softly.assertThat(actual.id()).isEqualTo(targetId);
-            softly.assertThat(actual.name()).isEqualTo(name);
+            softly.assertThat(actual.name()).isEqualTo(name.getValue());
             softly.assertThat(actual.coin()).isEqualTo(DEFAULT_COIN_AMOUNT);
         });
     }
