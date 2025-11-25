@@ -132,8 +132,8 @@ class UserControllerTest {
 
     static Stream<Arguments> provideInvalidCase() {
         return Stream.of(
-                Arguments.of(null, "password", "name must not be null"),
-                Arguments.of("name", null, "password must not be null")
+                Arguments.of(null, "password", "null이 될 수 없습니다: name"),
+                Arguments.of("name", null, "null이 될 수 없습니다: password")
         );
     }
 }

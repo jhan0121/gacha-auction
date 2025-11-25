@@ -26,9 +26,9 @@ class UserTest {
 
         // then
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(actual.getName()).isEqualTo(name);
-            softly.assertThat(actual.getPassword()).isEqualTo(password);
-            softly.assertThat(actual.getCoin()).isEqualTo(defaultCoinAmount);
+            softly.assertThat(actual.getName().getValue()).isEqualTo(name);
+            softly.assertThat(actual.getPassword().getValue()).isEqualTo(password);
+            softly.assertThat(actual.getCoin().getAmount()).isEqualTo(defaultCoinAmount);
         });
     }
 
@@ -46,8 +46,8 @@ class UserTest {
 
     private static Stream<Arguments> provideNullParameterCase() {
         return Stream.of(
-                Arguments.of(null, "password", "name must not be null"),
-                Arguments.of("name", null, "password must not be null")
+                Arguments.of(null, "password", "null이 될 수 없습니다: name"),
+                Arguments.of("name", null, "null이 될 수 없습니다: password")
         );
     }
 }
