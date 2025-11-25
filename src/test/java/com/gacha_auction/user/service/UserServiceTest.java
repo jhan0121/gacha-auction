@@ -5,7 +5,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.gacha_auction.exception.NotFoundException;
+import com.gacha_auction.user.domain.Password;
 import com.gacha_auction.user.domain.User;
+import com.gacha_auction.user.domain.UserName;
 import com.gacha_auction.user.repository.UserRepository;
 import com.gacha_auction.user.service.dto.input.FindUserInput;
 import com.gacha_auction.user.service.dto.input.UserInput;
@@ -39,8 +41,8 @@ class UserServiceTest {
     @DisplayName("유저를 저장한다")
     void save() {
         // given
-        final String name = "name";
-        final String password = "password";
+        final UserName name = UserName.from("name");
+        final Password password = Password.from("password");
         final UserInput input = new UserInput(name, password);
         User user = User.withoutId(name, password);
         setUserId(user, 1L);
@@ -53,7 +55,7 @@ class UserServiceTest {
         // then
         assertSoftly(softly -> {
             softly.assertThat(actual.id()).isNotNull();
-            softly.assertThat(actual.name()).isEqualTo(name);
+            softly.assertThat(actual.name()).isEqualTo(name.getValue());
         });
     }
 
@@ -62,8 +64,8 @@ class UserServiceTest {
     void findById() {
         // given
         final long targetId = 1L;
-        final String name = "name";
-        final String password = "password";
+        final UserName name = UserName.from("name");
+        final Password password = Password.from("password");
         User user = User.withoutId(name, password);
         setUserId(user, targetId);
         final FindUserInput findUserInput = FindUserInput.from(targetId);
@@ -77,7 +79,7 @@ class UserServiceTest {
         // then
         assertSoftly(softly -> {
             softly.assertThat(actual.id()).isEqualTo(targetId);
-            softly.assertThat(actual.name()).isEqualTo(name);
+            softly.assertThat(actual.name()).isEqualTo(name.getValue());
             softly.assertThat(actual.coin()).isEqualTo(DEFAULT_COIN_AMOUNT);
         });
     }

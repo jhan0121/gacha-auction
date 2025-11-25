@@ -23,19 +23,16 @@ public class User extends SoftDeleteBaseEntity {
 
     private static final Long DEFAULT_COIN_AMOUNT = 1000L;
 
-    public static User withoutId(final String name, final String password) {
-        return User.withoutId(name, password, DEFAULT_COIN_AMOUNT);
+    public static User withoutId(final UserName name, final Password password) {
+        return User.withoutId(name, password, Coin.from(DEFAULT_COIN_AMOUNT));
     }
 
-    public static User withoutId(final String name, final String password, final Long coin) {
+    public static User withoutId(final UserName name, final Password password, final Coin coin) {
         validateNameAndPassword(name, password);
-        final UserName userName = UserName.from(name);
-        final Password userPassword = Password.from(password);
-        final Coin userCoin = Coin.from(coin);
-        return new User(userName, userPassword, userCoin);
+        return new User(name, password, coin);
     }
 
-    private static void validateNameAndPassword(final String name, final String password) {
+    private static void validateNameAndPassword(final UserName name, final Password password) {
         NullValidator.builder()
                 .add(Fields.name, name)
                 .add(Fields.password, password)

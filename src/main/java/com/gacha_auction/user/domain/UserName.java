@@ -5,6 +5,7 @@ import com.gacha_auction.exception.InvalidValueException;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -16,19 +17,25 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants(level = AccessLevel.PRIVATE)
 @Getter
 @ToString
+@EqualsAndHashCode
 public class UserName {
 
     public static UserName from(final String value) {
         validateNotNullValue(value);
+        validateValueLength(value);
+        return new UserName(value);
+    }
+
+    private static void validateValueLength(final String value) {
         if (value.isBlank() || value.length() > 10) {
             throw new InvalidValueException("유저명은 1자 이상 10자 이하여야 합니다");
         }
-        return new UserName(value);
     }
 
     private static void validateNotNullValue(final String value) {
         NullValidator.builder()
-                .add(Fields.value, value);
+                .add(Fields.value, value)
+                .validate();
     }
 
     private String value;
