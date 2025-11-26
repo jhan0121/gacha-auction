@@ -9,6 +9,8 @@ group = 'com.gacha-auction'
 version = '0.0.1-SNAPSHOT'
 description = 'gacha-auction'
 
+ext['testcontainers.version'] = '2.0.2'
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
@@ -34,9 +36,9 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.rest-assured:rest-assured:5.5.6'
-    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
-    testImplementation 'org.testcontainers:junit-jupiter'
-    testImplementation 'org.testcontainers:mysql'
+    testImplementation platform('org.testcontainers:testcontainers-bom:2.0.2')
+    testImplementation 'org.testcontainers:testcontainers-junit-jupiter'
+    testImplementation 'org.testcontainers:testcontainers-mysql'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
