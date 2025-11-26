@@ -3,7 +3,7 @@ package com.gacha_auction.user.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.gacha_auction.TestcontainersConfiguration;
+import com.gacha_auction.AbstractIntegrationTest;
 import com.gacha_auction.exception.dto.ErrorResponse;
 import com.gacha_auction.user.controller.dto.request.UserRequest;
 import com.gacha_auction.user.controller.dto.response.FindUserResponse;
@@ -22,14 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("test")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@Import(TestcontainersConfiguration.class)
-class UserControllerTest {
+class UserControllerTest extends AbstractIntegrationTest {
 
     static final Long DEFAULT_COIN_AMOUNT = 1000L;
 
