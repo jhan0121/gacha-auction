@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 class GachaTest {
 
     @Test
-    @DisplayName("id가 없는 유저를 생성할 수 있다")
+    @DisplayName("id가 없는 Gacha를 생성할 수 있다")
     void withoutId() {
         //given
         final Title title = Title.from("title");
@@ -36,7 +36,7 @@ class GachaTest {
     @ParameterizedTest
     @MethodSource("provideNullParameterCase")
     @DisplayName("필드 값이 null인 Gacha를 생성 시, 예외를 발생한다")
-    void createWithNullPassword(final Title title, final GachaPeriod period, final String target) {
+    void createWithInvalidValue(final Title title, final GachaPeriod period, final String target) {
         // given
         // when
         // then
