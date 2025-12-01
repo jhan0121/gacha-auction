@@ -1,0 +1,64 @@
+language: ko-KR
+
+reviews:
+  profile: chill
+  high_level_summary: true
+  sequence_diagrams: true
+  poem: false
+  auto_review:
+    enabled: true
+    base_branches: [ "main" ]
+
+path_instructions:
+  - path: "src/main/java/com/gacha_auction/**/*.java"
+    instructions: |
+      다음 팀 컨벤션 규칙을 기준으로 코드를 리뷰해주세요:
+
+      **1. 코드 스타일 및 포맷 (Google Java Style 기반)**
+      - **기본 스타일:** Google Java Style Guide를 따르되, 아래 커스텀 규칙을 최우선으로 적용합니다.
+      - **열 제한 (Column Limit):** 120자 (유니코드 코드 포인트 기준).
+      - **들여쓰기 (Indentation):**
+        - **기본 블록:** +4 스페이스 (새 블록이 열릴 때마다 증가).
+        - **줄 바꿈 유지 (Continuation):** 원래 줄보다 최소 +8 스페이스 이상 들여쓰기.
+      - **수직 빈 줄:**
+        - 논리적인 코드 구분을 위해 자유롭게 사용 가능.
+        - 클래스/초기화 블록의 첫 번째 멤버 앞이나 마지막 멤버 뒤의 빈 줄은 강제하지 않음.
+      - **Import:** 와일드카드 import(`import java.util.*`) 사용 금지.
+      - **파라미터:** 열 제한(120자)을 넘을 경우 개행하여 하나씩 나열.
+      - **var 키워드:** 사용 지양 (팀 논의 필요).
+      - **접근 제어자:** `public` 메서드 상단, `private` 메서드 하단 배치.
+
+      **2. DTO (Data Transfer Object)**
+      - **네이밍:** 클래스명에 `Dto` 접미사 사용 금지.
+      - **계층별 분리:**
+        - Controller용: `...Request`, `...Response`
+        - Service용: `...Input`, `...Output`
+
+      **3. 아키텍처 및 패키지**
+      - **구조:** 도메인별 패키지(`example`) 하위에 계층(`controller`, `service` 등) 구성.
+      - **Service:** 인터페이스 없이 단일 클래스로 구현, Service 간 참조 아키텍처 준수.
+
+      **4. JPA Entity 및 DB**
+      - **ID:** 식별자 이름은 `id`로 통일.
+      - **상속:** `BaseEntity` 상속 필수, `equals`/`hashcode` 직접 구현 금지.
+      - **생성:** `new` 대신 정적 팩토리 메서드(`withId` 등) 사용 및 생성 시점 `validate` 수행.
+      - **JPA 어노테이션:** `@Entity` -> `@Column` 순서.
+
+      **5. 트랜잭션 및 메서드 순서**
+      - **Transactional:** Service 메서드에 `@Transactional` 명시(조회는 `readOnly=true`).
+      - **CRUD 순서:** `Read` -> `Create/Update` -> `Delete` 순서 정렬.
+
+      **6. 어노테이션 정렬 순서**
+      - **Lombok:** `@NoArgsConstructor` -> `@Getter` -> `@ToString` -> `@EqualsAndHashCode`.
+      - **Test:** `@Test` 계열 -> 소스(`@CsvSource`) -> `@DisplayName`.
+
+      **7. 테스트 (Test)**
+      - **명명:** `@DisplayName`은 한글로 명확히, 메서드명은 간단한 영어로.
+      - **주석:** `// given`, `// when`, `// then` 패턴 사용.
+      - **범위:** Controller(통합), Service(Mock 단위).
+
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "docs/code-conventions.md"
