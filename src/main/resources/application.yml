@@ -1,6 +1,8 @@
 spring:
   application:
     name: gacha-auction
+  profiles:
+    active: local
 
   config:
     import:
@@ -18,5 +20,6 @@ spring:
 
     properties:
       hibernate:
+        show_sql: true
         format_sql: true
     open-in-view: false
