@@ -4,6 +4,7 @@ reviews:
   profile: chill
   high_level_summary: true
   sequence_diagrams: true
+  poem: false
   auto_review:
     enabled: true
     base_branches: [ "main" ]
