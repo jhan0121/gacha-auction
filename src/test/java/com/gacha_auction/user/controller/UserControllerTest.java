@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -32,9 +31,6 @@ class UserControllerTest extends AbstractIntegrationTest {
     @LocalServerPort
     int port;
 
-    @Autowired
-    UserController userController;
-
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
@@ -47,7 +43,13 @@ class UserControllerTest extends AbstractIntegrationTest {
         final String name = "test";
         final String password = "password";
         final UserRequest request = new UserRequest(name, password);
-        final UserResponse response = userController.save(request).getBody();
+        final UserResponse response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/api/v1/users")
+                .then()
+                .statusCode(HttpStatus.CREATED.value()).extract()
+                .jsonPath().getObject(".", UserResponse.class);
         final URI uri = URI.create("/api/v1/users/" + response.id());
 
         // when
