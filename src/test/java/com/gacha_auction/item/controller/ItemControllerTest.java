@@ -6,6 +6,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import com.gacha_auction.AbstractIntegrationTest;
 import com.gacha_auction.exception.dto.ErrorResponse;
 import com.gacha_auction.item.controller.dto.request.ItemCreationRequest;
+import com.gacha_auction.item.controller.dto.response.FindItemResponse;
 import com.gacha_auction.item.controller.dto.response.ItemCreationResponse;
 import com.gacha_auction.item.domain.ItemType;
 import com.gacha_auction.item.domain.Rarity;
@@ -19,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -31,12 +31,57 @@ class ItemControllerTest extends AbstractIntegrationTest {
     @LocalServerPort
     int port;
 
-    @Autowired
-    ItemController itemController;
-
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+    }
+
+    @Test
+    @DisplayName("아이템 정보를 조회할 수 있다")
+    void getItemInfo() {
+        // given
+        final String name = "itemName";
+        final ItemType itemType = ItemType.NORMAL;
+        final Rarity rarity = Rarity.SSR;
+        final ItemCreationRequest request = new ItemCreationRequest(name, itemType, rarity);
+        final ItemCreationResponse response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/api/v1/items")
+                .then()
+                .statusCode(HttpStatus.CREATED.value()).extract()
+                .jsonPath().getObject(".", ItemCreationResponse.class);
+        final URI uri = URI.create("/api/v1/items/" + response.id());
+
+        // when
+        final FindItemResponse findItemResponse = RestAssured.given().log().all()
+                .when().get(uri)
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value()).extract()
+                .jsonPath().getObject(".", FindItemResponse.class);
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(findItemResponse.id()).isEqualTo(response.id());
+            softly.assertThat(findItemResponse.itemName()).isEqualTo(name);
+            softly.assertThat(findItemResponse.itemType()).isEqualTo(itemType);
+            softly.assertThat(findItemResponse.rarity()).isEqualTo(rarity);
+        });
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 아이템 id로 조회 시도 시, Not Found를 응답한다")
+    void getNotExistedUserInfo() {
+        // given
+        final long notExistedId = 1000L;
+        final URI uri = URI.create("/api/v1/items/" + notExistedId);
+
+        // when
+        // then
+        RestAssured.given().log().all()
+                .when().get(uri)
+                .then().log().all()
+                .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
@@ -73,7 +118,7 @@ class ItemControllerTest extends AbstractIntegrationTest {
     void saveInvalidFormat(final String name, ItemType itemType, Rarity rarity) {
         // given
         final ItemCreationRequest request = new ItemCreationRequest(name, itemType, rarity);
-        final URI uri = URI.create("/api/v1/users");
+        final URI uri = URI.create("/api/v1/items");
 
         // when
         final ErrorResponse errorResponse = RestAssured.given().log().all()
