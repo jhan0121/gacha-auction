@@ -71,7 +71,7 @@ class ItemControllerTest extends AbstractIntegrationTest {
 
     @Test
     @DisplayName("존재하지 않는 아이템 id로 조회 시도 시, Not Found를 응답한다")
-    void getNotExistedUserInfo() {
+    void getNotExistedItemInfo() {
         // given
         final long notExistedId = 1000L;
         final URI uri = URI.create("/api/v1/items/" + notExistedId);

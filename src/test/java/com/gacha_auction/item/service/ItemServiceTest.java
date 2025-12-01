@@ -93,9 +93,9 @@ class ItemServiceTest {
     @DisplayName("존재하지 않는 id를 기반으로 아이템 탐색 시도 시, 예외를 던진다")
     void findByNotExistedId() {
         // given
-        final Long notSavedUserId = 100L;
-        final FindItemInput input = new FindItemInput(notSavedUserId);
-        when(itemRepository.findById(notSavedUserId))
+        final Long notSavedItemId = 100L;
+        final FindItemInput input = new FindItemInput(notSavedItemId);
+        when(itemRepository.findById(notSavedItemId))
                 .thenReturn(Optional.empty());
 
         // when
