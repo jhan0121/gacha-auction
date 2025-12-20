@@ -26,7 +26,7 @@ class GachaItemTest {
         final LocalDateTime startAt = LocalDateTime.of(3000, 1, 1, 0, 0);
         final LocalDateTime endAt = LocalDateTime.of(3000, 12, 31, 0, 0);
         final GachaPeriod gachaPeriod = GachaPeriod.of(startAt, endAt);
-        final Gacha gacha = Gacha.withoutId(title, gachaPeriod);
+        final Gacha gacha = Gacha.withoutId(title, gachaPeriod, GachaType.NORMAL, 100, 100);
 
         final ItemName itemName = ItemName.from("itemName");
         final Item item = Item.withoutId(itemName, ItemType.LIMITED, Rarity.SSR);
@@ -61,7 +61,7 @@ class GachaItemTest {
         final LocalDateTime startAt = LocalDateTime.of(3000, 1, 1, 0, 0);
         final LocalDateTime endAt = LocalDateTime.of(3000, 12, 31, 0, 0);
         final GachaPeriod gachaPeriod = GachaPeriod.of(startAt, endAt);
-        final Gacha gacha = Gacha.withoutId(title, gachaPeriod);
+        final Gacha gacha = Gacha.withoutId(title, gachaPeriod, GachaType.NORMAL, 100, 100);
 
         final ItemName itemName = ItemName.from("itemName");
         final Item item = Item.withoutId(itemName, ItemType.LIMITED, Rarity.SSR);
